@@ -9,6 +9,7 @@ sequence = []
 userMoves = []
 userTurn = False
 mode_label_text = "Strict OFF"
+counter_label_text = "--"
 #colors for game display in rgbyg order
 colors = ["#dd4b3e", "#3edd4b", "#4b3edd", "#ffea37"]
 active_colors = ["#e47267", "#7de886", "#7267e4", "#fff280"]
@@ -42,17 +43,30 @@ def generateSeq():
     for x in range(max_seq_length):
         sequence.append(randint(0,3))
 
+#toggles strict mode on and off
 def toggleStrict(event):
     global strictMode, mode_label, mode_label_text
     strictMode = not strictMode
     mode_label_text = "Strict ON" if strictMode else "Strict OFF"
     canvas.itemconfigure(mode_label, text=mode_label_text)
 
+#updates the counter based on input parameter
+#if you input 0, that will reset the counter
+#else, it will increment the counter if the game has startd
+def updateCounter(operation):
+    global counter_label_text, count
+    if (operation == 0):
+        counter_label_text = 0;
+    elif (counter_label_text != "--"):
+        counter_label_text = str(int(counter_label_text) + 1)
+    canvas.itemconfigure(count, text=counter_label_text)
+
+
 root = tk.Tk()
 canvas = tk.Canvas(root, width=800, height=600)
 canvas.pack()
 
-#these are the buttons
+#-----------------------------these are the buttons-------------------------------------
 green = canvas.create_rectangle(2, 2, 400, 300, fill=colors[1], activefill=active_colors[1], width=2)
 
 yellow = canvas.create_rectangle(2, 300, 400, 600, fill=colors[3],activefill=active_colors[3], width=2)
@@ -68,7 +82,10 @@ title = canvas.create_text(400, 275, font=("Impact", 30, 'bold'), text="SIMON", 
 
 #this is the counter and strict toggle button
 counter_label = canvas.create_text(300, 325, font=("Impact", 20), text="SCORE:", fill="white")
-count = canvas.create_text(375, 325, font=("Impact", 20), text="--", fill="red")
+count = canvas.create_text(375, 325, font=("Impact", 20), text=counter_label_text, fill="red")
 mode_label = canvas.create_text(475, 325, font=("Impact", 20), text = mode_label_text, fill="white", tags="strictToggle")
 canvas.tag_bind(mode_label, '<ButtonPress-1>', toggleStrict)
+
+
+
 root.mainloop()
