@@ -1,5 +1,14 @@
 import tkinter as tk
 from time import sleep
+from random import randint;
+#sequence length cap
+max_seq_length = 20
+#necessary game variables
+strictMode = False
+sequence = []
+userMoves = []
+userTurn = False
+mode_label_text = "Strict OFF"
 #colors for game display in rgbyg order
 colors = ["#dd4b3e", "#3edd4b", "#4b3edd", "#ffea37"]
 active_colors = ["#e47267", "#7de886", "#7267e4", "#fff280"]
@@ -27,12 +36,23 @@ def flash (id):
     root.update()
     root.after(3000, blinkOff(id))
 
+#generates the random sequence of buttons using their ids
+#sequence is as long as the pre-specified max sequence length
+def generateSeq():
+    for x in range(max_seq_length):
+        sequence.append(randint(0,3))
+
+def toggleStrict(event):
+    global strictMode, mode_label, mode_label_text
+    strictMode = not strictMode
+    mode_label_text = "Strict ON" if strictMode else "Strict OFF"
+    canvas.itemconfigure(mode_label, text=mode_label_text)
 
 root = tk.Tk()
 canvas = tk.Canvas(root, width=800, height=600)
 canvas.pack()
 
-
+#these are the buttons
 green = canvas.create_rectangle(2, 2, 400, 300, fill=colors[1], activefill=active_colors[1], width=2)
 
 yellow = canvas.create_rectangle(2, 300, 400, 600, fill=colors[3],activefill=active_colors[3], width=2)
@@ -46,4 +66,9 @@ center = canvas.create_rectangle(200, 225, 601, 376,
 outline="#aaaaaa", width=2, fill="black")
 title = canvas.create_text(400, 275, font=("Impact", 30, 'bold'), text="SIMON", fill="white")
 
+#this is the counter and strict toggle button
+counter_label = canvas.create_text(300, 325, font=("Impact", 20), text="SCORE:", fill="white")
+count = canvas.create_text(375, 325, font=("Impact", 20), text="--", fill="red")
+mode_label = canvas.create_text(475, 325, font=("Impact", 20), text = mode_label_text, fill="white", tags="strictToggle")
+canvas.tag_bind(mode_label, '<ButtonPress-1>', toggleStrict)
 root.mainloop()
