@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from time import sleep
+from threading import Timer
 from random import randint;
 
 
@@ -54,8 +54,12 @@ def flash (id, delay=1000):
 #generates the random sequence of buttons using their ids
 #sequence is as long as the pre-specified max sequence length
 def generate_seq():
+    global sequence
     for x in range(max_seq_length):
-        sequence.append(randint(0,3))
+        next_button = randint(0,3)
+        while (x >= 1 and sequence[x-1] == next_button):
+            next_button = randint(0,3)
+        sequence.append(next_button)
 
 #toggles strict mode on and off
 def toggle_strict(event):
@@ -132,8 +136,6 @@ def start_game():
         game_started = True
         update_counter(0)
         generate_seq()
-        for x in range(4):
-            flash(x, 1000)
         display_seq()
 
 
