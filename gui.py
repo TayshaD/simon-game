@@ -124,11 +124,12 @@ def user_move(id):
                 update_counter(0)
                 sequence = []
                 generate_seq()
+
             else:
                 tk.messagebox.showerror("Whoops!", "That was the wrong button. Try it again.")
                 user_moves = []
                 user_turn = False
-                display_seq()
+            display_seq()
 #function to start the game
 def start_game():
     global game_started
